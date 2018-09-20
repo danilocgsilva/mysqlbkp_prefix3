@@ -19,11 +19,12 @@ validates_variables_number_given () {
 
 ## Displays a message to conduct the user to put the right number of arguments
 message_correct_numbers_variables () {
-  echo "There\'s no a valid argument numbers"
-  echo "Provides 3 arguments: {mysql client login path value} {database name} {database prefix}. Just outputs the results usign configurations stored in the --login-path. More secure, less flexible."
-  echo "Provides 4 arguments: {mysql client login path value} {database name} {database prefix} {system path}. Backups the database in the given directory using configurations stored in the --login-path. More secure, less flexible."
-  echo "Provides 5 arguments: {database user} {database password} {database host} {database name} {database prefix}. Just outputs the results with configurations provided inline. Less secure, more flexible."
-  echo "Provides 6 arguments: {database user} {database password} {database host} {database name} {database prefix} {system path}. Backups the database in the given directory with configurations provided inline. Less secure, more flexible."
+  echo "There's no a valid argument numbers"
+  echo "You can provide:"
+  echo "* 3 arguments: {mysql client login path value} {database name} {database prefix}. Just outputs the results usign configurations stored in the --login-path. More secure, less flexible."
+  echo "* 4 arguments: {mysql client login path value} {database name} {database prefix} {system path}. Backups the database in the given directory using configurations stored in the --login-path. More secure, less flexible."
+  echo "* 5 arguments: {database user} {database password} {database host} {database name} {database prefix}. Just outputs the results with configurations provided inline. Less secure, more flexible."
+  echo "* 6 arguments: {database user} {database password} {database host} {database name} {database prefix} {system path}. Backups the database in the given directory with configurations provided inline. Less secure, more flexible."
 }
 
 ## Main function
