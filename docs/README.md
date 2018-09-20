@@ -9,7 +9,7 @@ Design document to help script development
 * mysql login-path
 * database name
 * database prefix
-* say if going to save locally or just output. This variable is optional. If nothing is given, the just output the results. If something is given, the script will assume that it is a real and writable system path to where the script will put eac prefixed table.
+* say if going to save locally or just output. This variable is optional. If nothing is given, just outputs the results. If something is given, the script will assume that it is a real and writable system path to where the script will put eac prefixed table.
 
 ### Scenario 2
 
@@ -30,7 +30,6 @@ The script will control the scenario by the number of provided variables. There 
 
 ## Methods
 
-* Check the variables number provided
 * Check if mysql is locally installed
 * Check if --login-path is available in the system
 * Check if the database address is acessible or is available
@@ -38,3 +37,5 @@ The script will control the scenario by the number of provided variables. There 
 * Check if a path exists
 * Check if a path is writable
 * Return error message with instructions if wrong number of variables is provided
+* Validates the number of given variables.
+* Returns a message to say how to provides valid argument amounts.
