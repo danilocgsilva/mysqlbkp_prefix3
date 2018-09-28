@@ -4,6 +4,13 @@
 VERSION="0.0.1"
 
 ##
+do_backup () {
+  if [ $# = 3 ]; then
+    mysql --login-path=$1 $2 -e "SHOW TABLES"
+  fi
+}
+
+##
 validates_variables_number_given () {
 
   if
@@ -30,8 +37,9 @@ message_correct_numbers_variables () {
 ## Main function
 mslbkpprefixin () {
   local variables_given=$#
-
   validates_variables_number_given
+
+  do_backup "${@}"
 }
 
 ## detect if being sourced and
