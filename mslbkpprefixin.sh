@@ -4,9 +4,57 @@
 VERSION="0.0.1"
 
 ##
+loop_prefix_loginpath () {
+  mysql --login-path=$1 $2 -e "SHOW TABLES" | grep -i "^$3"
+}
+
+##
+loop_prefix_credentials () {
+  mysql -u$1 -p$2 -h$3 $4 -e "SHOW TABLES" | grep -i "^$5"
+}
+
+##
+outputs_with_loginpath () {
+  for i in $(loop_prefix_loginpath $1 $2 $3)
+  do
+    mysqldump --login-path=$1 $2 $i
+  done
+}
+
+##
+outputs_with_credentials () {
+  for i in $(loop_prefix_credentials $1 $2 $3 $4 $5)
+  do
+    mysqldump -u$1 -p$2 -h$3 $4 $5
+  done
+}
+
+##
+save_with_loginpath () {
+  for i in $(loop_prefix_loginpath $1 $2 $3)
+  do
+    mysqldump --login-path=$1 $2 $i > $4/$i.sql
+  done
+}
+
+##
+save_with_credentials () {
+  for i in $(loop_prefix_credentials $1 $2 $3 $4)
+  do
+    mysqldump -u$1 -p$2 -h$3 $4 $i > $6/$i.sql
+  done 
+}
+
+##
 do_backup () {
   if [ $# = 3 ]; then
-    mysql --login-path=$1 $2 -e "SHOW TABLES"
+    outputs_with_loginpath $1 $2 $3
+  elif [ $# = 4 ]; then
+    save_with_loginpath $1 $2 $3 $4
+  elif [ $# = 4 ]; then
+    outputs_with_credentials $1 $2 $3 $4 $5
+  elif [ $# = 5 ]; then
+    save_with_credentials $1 $2 $3 $4 $5 $6
   fi
 }
 
