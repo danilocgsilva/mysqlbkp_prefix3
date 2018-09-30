@@ -25,12 +25,17 @@ outputs_with_loginpath () {
 outputs_with_credentials () {
   for i in $(loop_prefix_credentials $1 $2 $3 $4 $5)
   do
-    mysqldump -u$1 -p$2 -h$3 $4 $5
+    mysqldump -u$1 -p$2 -h$3 $4 $i
   done
 }
 
 ##
 save_with_loginpath () {
+  if [ ! -d $4 ]; then
+    echo The \'$4\' must be a valid path. Does not exists. Skiping $0 script.
+    exit 1
+  fi
+
   for i in $(loop_prefix_loginpath $1 $2 $3)
   do
     mysqldump --login-path=$1 $2 $i > $4/$i.sql
@@ -39,7 +44,12 @@ save_with_loginpath () {
 
 ##
 save_with_credentials () {
-  for i in $(loop_prefix_credentials $1 $2 $3 $4)
+  if [ ! -d $6 ]; then
+    echo The \'$6\' must be a valid path. Does not exists. Skiping $0 script.
+    exit 1
+  fi
+
+  for i in $(loop_prefix_credentials $1 $2 $3 $4 $5)
   do
     mysqldump -u$1 -p$2 -h$3 $4 $i > $6/$i.sql
   done 
@@ -51,9 +61,9 @@ do_backup () {
     outputs_with_loginpath $1 $2 $3
   elif [ $# = 4 ]; then
     save_with_loginpath $1 $2 $3 $4
-  elif [ $# = 4 ]; then
-    outputs_with_credentials $1 $2 $3 $4 $5
   elif [ $# = 5 ]; then
+    outputs_with_credentials $1 $2 $3 $4 $5
+  elif [ $# = 6 ]; then
     save_with_credentials $1 $2 $3 $4 $5 $6
   fi
 }
