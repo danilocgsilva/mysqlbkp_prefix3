@@ -1,7 +1,9 @@
 #!/bin/bash
 
+set -e
+
 ## version
-VERSION="0.0.1"
+VERSION="1.0.1"
 
 ##
 loop_prefix_loginpath () {
@@ -14,10 +16,19 @@ loop_prefix_credentials () {
 }
 
 ##
+# make_dump () {
+#   if [ $(uname) -eq Darwin ]; then
+#     mysqldump --column-statistics=0 --login-path=$1 $2 $i
+#   else
+#     mysqldump --login-path=$1 $2 $i
+#   fi
+# }
+
+##
 outputs_with_loginpath () {
   for i in $(loop_prefix_loginpath $1 $2 $3)
   do
-    mysqldump --login-path=$1 $2 $i
+    mysqldump --login-path=$1 $extra_prevent_statistic_errors $2 $i
   done
 }
 
@@ -25,7 +36,7 @@ outputs_with_loginpath () {
 outputs_with_credentials () {
   for i in $(loop_prefix_credentials $1 $2 $3 $4 $5)
   do
-    mysqldump -u$1 -p$2 -h$3 $4 $i
+    mysqldump $extra_prevent_statistic_errors -u$1 -p$2 -h$3 $4 $i
   done
 }
 
@@ -38,7 +49,7 @@ save_with_loginpath () {
 
   for i in $(loop_prefix_loginpath $1 $2 $3)
   do
-    mysqldump --login-path=$1 $2 $i > $4/$i.sql
+    mysqldump --login-path=$1 $extra_prevent_statistic_errors $2 $i > $4/$i.sql
   done
 }
 
@@ -51,7 +62,7 @@ save_with_credentials () {
 
   for i in $(loop_prefix_credentials $1 $2 $3 $4 $5)
   do
-    mysqldump -u$1 -p$2 -h$3 $4 $i > $6/$i.sql
+    mysqldump $extra_prevent_statistic_errors -u$1 -p$2 -h$3 $4 $i > $6/$i.sql
   done 
 }
 
@@ -96,6 +107,10 @@ message_correct_numbers_variables () {
 mslbkpprefixin () {
   local variables_given=$#
   validates_variables_number_given
+
+  if [ $(uname) = Darwin ]; then
+    local extra_prevent_statistic_errors='--column-statistics=0'
+  fi
 
   do_backup "${@}"
 }
